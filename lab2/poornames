@@ -1,0 +1,65 @@
+#! /bin/bash
+slash=/
+newline=\\n
+case "$1" in
+    -r )
+	shift
+        output=$(exec ./poornames $1)
+        path=$1$slash
+        directory=$(ls -d */ | grep ".\{,14\}" | grep "[A-Za-z\.\_\-]*")
+        while read -r line
+        do
+            output=$output$(exec ./poornames -r "$line")
+        done <<< "$directory"
+        ;;
+    * )
+	
+        if [ $# -eq 0 ]
+        then
+            set $1 $(pwd)
+	elif [ $# -eq 1 ] && [ $1 == "\." ]
+	then
+	    set $1 $(pwd)
+        elif [ $# -gt 1 ]
+        then
+            echo "Error: too many arguments" 1>&2
+            exit 1
+        elif [ $1 == "-" ]
+        then
+            echo "Error: not a file or a directory" 1>&2
+            exit 2
+        elif [ ! -d "$1" ]
+        then
+            echo "Error: $1 is not a directory" 1>&2
+            exit 3
+        fi
+
+        path=$1
+	if [ "${path:0:1}" != "/" ] #relative path
+	then
+	    path=$(pwd)"$slash""$path"
+	fi
+
+	if [ "${path: -1}" != "/" ] #absolute path ending in / or not
+	then
+	    path="$path""$slash"
+	    echo $path
+	fi
+	
+        value=$(ls -a $path | grep -vx "[A-Za-z]\+[A-Za-z\.\_\-]*")
+        value14=$(ls -a $path | grep ".\{14\}.\+")
+        cases=$(ls -a $path | uniq -id )
+        finalcase=""
+        while read -r line
+        do
+            finalcase="$finalcase"$(ls -a $path | grep -oi "$line")$newline
+        done <<< "$cases"
+
+        output="$finalcase""$value14""$value"
+        temp_output=$(echo -e "$output" | sort -bu)
+	while read -r line
+	do
+	    final_output="$final_output"$path"$line"$newline
+	done <<< "$temp_output"
+	echo -e "$final_output" | grep -v "/.$\|/..$\|/\s*$|^\n"
+esac

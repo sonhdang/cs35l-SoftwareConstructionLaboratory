@@ -1,0 +1,23 @@
+#!/bin/bash
+touch temp
+while read input
+do
+    echo $input>>temp
+done
+
+grep -E "<td.*>[^.]+" temp>>temp2 # filtering lines start with <td>
+sed -i '/<td>\(<\/td>\|<br>\)/d' temp2 # delete all line that has <td></td> or <td></br>
+sed -i '1,4d' temp2 # delete the first 4 lines
+sed -i '0~2d' temp2 # delete all the English lines
+sed -i 's/<u>\|<\/u>\|?//g' temp2 # delete <u>, </u>, and ?
+grep -Eo ">.*<" temp2 > temp  # getting the Hawaiin words enclosed by > <
+sed -i 's/\ <//g' temp # deleteing all the spaces followed by <
+sed -i 's/[><]//g' temp # removes all the > < characters
+sed -i "s/\`/\'/g" temp # replacing ` with '
+sed -i 's/[-\ ]/\n/g' temp # splitting words separated by a space
+tr '[:upper:]' '[:lower:]' < temp > temp2
+sort -u temp2 > temp # sorting the dictionary and get rid of duplicates
+
+cat temp
+rm temp
+rm temp2

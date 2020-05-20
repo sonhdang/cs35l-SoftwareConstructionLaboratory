@@ -1,0 +1,43 @@
+#! /bin/bash                                                                                  
+slash=/
+newline=\\n
+
+case "$1" in
+    -r )
+	shift
+        exec ./poornames $1
+	path=$1$slash
+	directory=
+        ;;
+    * )
+
+        if [ $# -eq 0 ]
+        then
+            set $1 $(pwd)
+        elif [ $# -gt 1 ]
+        then
+            echo "Error: too many arguments" 1>&2
+            exit 1
+        elif [ $1 == "-" ]
+        then
+            echo "Error: not a file or a directory" 1>&2
+            exit 2
+        elif [ ! -d "$1" ]
+        then
+            echo "Error: $1 is not a directory" 1>&2
+            exit 3
+        fi
+
+        path=$1$slash
+	value=$(ls -a $path | grep -vx "[A-Za-z]\+[A-Za-z\.\_\-]*")
+	value14=$(ls -a $path | grep ".\{14\}.\+")
+	cases=$(ls -a $path | uniq -id )
+	finalcase=""
+	while read -r line
+	do
+	    finalcase="$finalcase"$(ls -a $path | grep -oi "$line")$newline
+	done <<< "$cases"
+	
+	output="$finalcase""$value14""$value"
+	echo -e "$output" | sort -bu | sed '1,2d'
+esac

@@ -1,0 +1,85 @@
+1. man -k
+
+2. mv is located at /usr/local/cs/bin/mv
+   sh is located at /usr/bin/sh
+
+   shell commands used:
+   $ which mv
+   $ which sh
+
+3. ar, pr, and tr
+   ar: create, modify, and extract from archive or create and maintain library archives
+   pr: print files or convert text files for printing
+   tr: translate characters or translate or delete characters
+
+   shell commands used:
+   cd /usr/bin
+   find ?r
+   man -f ar
+   man -f pr
+   man -f tr
+
+4. /usr/bin/emacs-24.3
+   
+   shell commands used
+   readlink -f /usr/bin/emacs
+
+5. /usr/bin/gcc version number is 4.8.5 20150623 (Red Hat 4.8.5-39)
+   gcc version number is 9.2.0
+
+   The reason for the difference is when you use the command "gcc", the program that is opened is in /usr/local/cs/bin while /usr/bin/gcc is located at /usr/bin. They are two different version of gcc, located at two different directories.
+
+6. u+sx set the setuid bit and set the execution bit. When the setuid is set, the file which is executed will be excuted with the owner's priviledge instead of the user's priviledge
+   o-w removes the write permission for others.
+
+7. shell commands used
+   find /usr/local/cs -type d -mtime -29
+
+8. The number of symbolic links in /usr/local/cs is 2533
+   
+   shell commands used
+   find /usr/local/cs -type l | wc -l
+
+9. librom1394.so.0.3.0
+   
+   shell commands used
+   ls -tal /usr/lib64 | tail
+
+10. The locale command get its data from the settings of the environment variables that control the locale
+
+   shell commands used
+   man locale
+
+11. downcase-dwim, downcase-region, downcase-word
+    
+   emacs commands used
+   C-h a Enter d o w n c a s e Enter
+
+12. C-M-r runs the command isearch-backward-regxp
+    C-M-v runs the command scroll-other-window
+
+    emacs commands used
+    C-h c C-M-r
+    C-h c C-M-r
+
+13. C-g runs the command keyboard-quit (found in global-map), which is an interactive compiled Lisp function in 'simple.el'.
+
+    emacs commands used
+    C-h k C-g
+
+14. yank reinserts ("paste") the last strech of killed text. More precisely, reinsert the most recent kill, which is the stretch of killed text most recently killed OR yanked. Put point at the end, and set mark at the beginning without activating it.
+    to invoke yank, use the keystroke C-y
+
+    emacs commands used
+    C-h f y a n k Enter
+
+15. The differences between function "dired" Emacs and ls -l are
+    dired does not categorize file types by color except for symbolic links, current directory and parent directory ls -l catagorize file types by color
+
+    dired displays all types of files including hidden files while ls -l does not display hidden files unless using option -a
+
+    emacs commands used
+    M-x d i r e d Enter Backspace Backspace / u s r / b i n Enter
+    
+    shell commands used
+    ls -l /usr/bin
